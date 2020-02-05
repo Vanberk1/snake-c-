@@ -1,7 +1,7 @@
 #include <SDL2/SDL.h>
 #include <iostream>
-#include "snake.h"
-#include "food.h";
+#include "stateMachine.h"
+#include "gameState.h"
 
 const int GRID_X = 40;
 const int GRID_Y = 30;
@@ -31,14 +31,22 @@ int main(int argc, char* args[]) {
         std::cout << "SDL renderer Failed!" << std::endl;
         return 1;
     }
-    int timer = 0;
-    int x = 4, y = 5;
-    int size = 20;
-    int score = 0;
 
-    Snake snake(x, y, size, RIGHT);
-    Food food(size);
-    food.respawn(snake);
+    StateMachine stateMachine;
+
+    // GameState* gameState = new GameState();
+    // gameState->init();
+    stateMachine.addState(new GameState());
+
+    // int m_Score = 0;
+	// int m_Timer = 0;
+	// int m_SnakeSpeed = 50;
+	// int m_Size = 20;
+	// int m_PositionX = 4;
+	// int m_PositionY = 5;
+
+    // Snake m_Snake(m_PositionX, m_PositionY, m_Size, RIGHT);
+	// Food m_Food(m_Size);
 
     while(isRunning) {
         SDL_Event event;
@@ -46,51 +54,66 @@ int main(int argc, char* args[]) {
             if(event.type == SDL_QUIT || event.key.keysym.scancode == SDL_SCANCODE_ESCAPE) {
                 isRunning = false;
             }
-
-            if(event.type == SDL_KEYDOWN) {
-                if(event.key.keysym.scancode == SDL_SCANCODE_W) {
-                    snake.changeDirection(UP);
-                }
-                if(event.key.keysym.scancode == SDL_SCANCODE_A) {
-                    snake.changeDirection(LEFT);
-                }
-                if(event.key.keysym.scancode == SDL_SCANCODE_S) {
-                    snake.changeDirection(DOWN);
-                }
-                if(event.key.keysym.scancode == SDL_SCANCODE_D) {
-                    snake.changeDirection(RIGHT);
-                }
-
-                if(event.key.keysym.scancode == SDL_SCANCODE_SPACE) {
-                    // snake.addSegment();
-                    // food.respawn(snake);
-                }
-            }
-        }
-
-        timer++;
-        if(timer > 100) {
-            snake.update();
             
-            SDL_Rect headRect = snake.getBody().front();
-            SDL_Rect foodRect = food.getBody();
-            if(headRect.x == foodRect.x && headRect.y == foodRect.y) {
-                score++;
-                snake.addSegment();
-                food.respawn(snake);
-                std::cout << "Score: " << score << std::endl;
-            }
-            timer = 0;
+            stateMachine.input(event);
+            // gameState->input(event);
+            // if(!m_Snake.gameOver()) {
+            //     if(event.type == SDL_KEYDOWN) {
+            //         if(event.key.keysym.scancode == SDL_SCANCODE_W) {
+            //             m_Snake.changeDirection(UP);
+            //         }
+            //         if(event.key.keysym.scancode == SDL_SCANCODE_A) {
+            //             m_Snake.changeDirection(LEFT);
+            //         }
+            //         if(event.key.keysym.scancode == SDL_SCANCODE_S) {
+            //             m_Snake.changeDirection(DOWN);
+            //         }
+            //         if(event.key.keysym.scancode == SDL_SCANCODE_D) {
+            //             m_Snake.changeDirection(RIGHT);
+            //         }
+
+            //         if(event.key.keysym.scancode == SDL_SCANCODE_SPACE) {
+            //             // snake.addSegment();
+            //             // food.respawn(snake);
+            //         }
+            //     }
+            // }
         }
-        
-        SDL_SetRenderDrawColor(renderer, 30, 30, 30, 255);
-        SDL_RenderClear(renderer);
-        
-        food.draw(renderer);
-        snake.draw(renderer);
-    
-        SDL_RenderPresent(renderer);
+
+        stateMachine.update();
+        // gameState->update();
+        // if(!m_Snake.gameOver()) {
+        //     m_Timer++;
+        //     if(m_Timer > m_SnakeSpeed) {
+        //         m_Snake.update();
+                
+        //         SDL_Rect headRect = m_Snake.getBody().front();
+        //         SDL_Rect foodRect = m_Food.getBody();
+        //         if(headRect.x == foodRect.x && headRect.y == foodRect.y) {
+        //             m_Score++;
+        //             m_Snake.addSegment();
+        //             m_Food.respawn(m_Snake);
+        //             std::cout << "Score: " << m_Score << std::endl;
+        //         }
+        //         m_Timer = 0;
+        //     }
+        // }
+
+        stateMachine.draw(renderer);
+        // gameState->draw(renderer);
+        // if(!m_Snake.gameOver()) {
+        //     SDL_SetRenderDrawColor(renderer, 30, 30, 30, 255);
+        //     SDL_RenderClear(renderer);
+        //     m_Food.draw(renderer);
+        //     m_Snake.draw(renderer);
+        //     SDL_RenderPresent(renderer);
+        // }
     }
+
+    stateMachine.destroy();
+    // gameState->destroy();
+    // delete m_Snake;
+    // delete m_Food;
 
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
