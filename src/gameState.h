@@ -1,6 +1,7 @@
 #pragma once
 
 #include "state.h"
+#include "stateMachine.h"
 #include "snake.h"
 #include "food.h"
 
@@ -10,6 +11,7 @@ struct vec2 {
 
 class GameState : public State {
 private:
+	StateMachine* m_StateMachine;
 	int m_Score;
 	int m_Timer;
 	int m_SnakeSpeed;
@@ -20,7 +22,7 @@ private:
 	Food* m_Food;
 
 public:
-  	GameState();
+  	GameState(StateMachine* stateMachine);
 	void init() override;
 	void input(SDL_Event event) override;
 	void update() override;

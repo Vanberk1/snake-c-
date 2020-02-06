@@ -1,13 +1,13 @@
 #include "gameState.h"
 
-GameState::GameState() {
-
+GameState::GameState(StateMachine* stateMachine) {
+	m_StateMachine = stateMachine;
 }
 
 void GameState::init() {
 	m_Score = 0;
 	m_Timer = 0;
-	m_SnakeSpeed = 50;
+	m_SnakeSpeed = 250;
 	m_Size = 20;
 	m_Position.x = 4;
 	m_Position.y = 5;
@@ -20,6 +20,9 @@ void GameState::init() {
 void GameState::input(SDL_Event event) {
 	if(!m_Snake->gameOver()) {
 		if(event.type == SDL_KEYDOWN) {
+			if(event.key.keysym.scancode == SDL_SCANCODE_ESCAPE) {
+				m_StateMachine->popState();
+			}
 			if(event.key.keysym.scancode == SDL_SCANCODE_W) {
 				m_Snake->changeDirection(UP);
 			}
@@ -62,11 +65,8 @@ void GameState::update() {
 
 void GameState::draw(SDL_Renderer* renderer) {
 	if(!m_Snake->gameOver()) {
-		SDL_SetRenderDrawColor(renderer, 30, 30, 30, 255);
-		SDL_RenderClear(renderer);
 		m_Food->draw(renderer);
 		m_Snake->draw(renderer);
-        SDL_RenderPresent(renderer);
 	}
 }
 

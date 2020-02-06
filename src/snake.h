@@ -18,6 +18,7 @@ private:
 	int m_Size;
 	bool m_NewSegment;
 	bool m_GameOver;
+	bool m_CanChange;
 public:
 	Snake(int x, int y, int size, Direction dir);
 	void changeDirection(Direction dir);

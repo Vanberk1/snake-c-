@@ -5,16 +5,20 @@ Snake::Snake(int x, int y, int size, Direction dir) {
 	m_Size = size;
 	m_NewSegment = false;
 	m_GameOver = false;
+	m_CanChange = true;
 	SDL_Rect head = { x * size, y * size, size - 1, size - 1 }; 
 	m_Body.push_back(head);
 }
 
 void Snake::changeDirection(Direction dir) {
-	if(m_Direction == UP		&& dir != DOWN 	||
-		 m_Direction == DOWN 	&& dir != UP 		||
-		 m_Direction == LEFT 	&& dir != RIGHT ||
-		 m_Direction == RIGHT && dir != LEFT)
-	m_Direction = dir;
+	if(m_CanChange) {
+		if(m_Direction == UP		&& dir != DOWN 	||
+			m_Direction == DOWN 	&& dir != UP 		||
+			m_Direction == LEFT 	&& dir != RIGHT ||
+			m_Direction == RIGHT && dir != LEFT)
+		m_Direction = dir;
+		m_CanChange = false;
+	}
 }
 
 void Snake::addSegment() {
@@ -41,13 +45,14 @@ void Snake::update() {
 
 		if(!m_NewSegment) {
 			m_Body.pop_back();
+			m_CanChange = true;
 		} 
 		else {
 			m_NewSegment = false;
 		}
 	}
 
-		checkCollision();
+	checkCollision();
 }
 
 void Snake::checkCollision() {

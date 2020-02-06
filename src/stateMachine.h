@@ -1,16 +1,18 @@
 #pragma once
 
 #include <SDL2/SDL.h> 
-#include <stack>
+#include <vector>
+#include <memory>
 #include <iostream>
 #include "state.h"
 
 class StateMachine {
 private:
-	std::stack<State*> m_States;
+	std::vector<std::unique_ptr<State>> m_States;
 
 public:
-	void addState(State* state);
+	void pushState(std::unique_ptr<State> state);
+	void popState();
 	void input(SDL_Event event);
 	void update();
 	void draw(SDL_Renderer* renderer);
