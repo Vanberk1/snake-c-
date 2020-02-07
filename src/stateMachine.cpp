@@ -20,9 +20,9 @@ void StateMachine::update() {
 		m_States.back()->update();
 }
 
-void StateMachine::draw(SDL_Renderer* renderer) {
+void StateMachine::draw() {
 	if(m_States.back() != nullptr)
-		m_States.back()->draw(renderer);
+		m_States.back()->draw();
 }
 
 void StateMachine::destroy() {
