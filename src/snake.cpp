@@ -12,9 +12,9 @@ Snake::Snake(int x, int y, int size, Direction dir) {
 
 void Snake::changeDirection(Direction dir) {
 	if(m_CanChange) {
-		if(m_Direction == UP		&& dir != DOWN 	||
-			m_Direction == DOWN 	&& dir != UP 		||
-			m_Direction == LEFT 	&& dir != RIGHT ||
+		if(m_Direction == UP	&& dir != DOWN 	||
+			m_Direction == DOWN && dir != UP 	||
+			m_Direction == LEFT && dir != RIGHT ||
 			m_Direction == RIGHT && dir != LEFT)
 		m_Direction = dir;
 		m_CanChange = false;
@@ -26,6 +26,7 @@ void Snake::addSegment() {
 }
 
 void Snake::update() {
+	checkCollision();
 	if(!m_GameOver) {
 		SDL_Rect actualHead = m_Body.front();
 		switch(m_Direction) {
@@ -51,20 +52,17 @@ void Snake::update() {
 			m_NewSegment = false;
 		}
 	}
-
-	checkCollision();
 }
 
 void Snake::checkCollision() {
 	SDL_Rect head = m_Body.front();
 	for(auto it = ++m_Body.begin(); it != m_Body.end(); it++) {
 		if(head.x == it->x && head.y == it->y) {
-			std::cout << "Game Over!" << std::endl;
 			m_GameOver = true;
 		}
 	}
 
-	if(head.x < 0 || head.x > 800 || head.y < 0 || head.y > 600) {
+	if(head.x < 0 || head.x > 800 - m_Size || head.y < 0 || head.y > 600 - m_Size) {
 		m_GameOver = true;
 	}
 }

@@ -14,12 +14,12 @@ private:
     SDL_Color m_Color;
 public:
     TextLabel();
-    void createLabel(std::string text, SDL_Rect* position, SDL_Color color);
+    void createLabel(std::string text, SDL_Color color);
     void draw(SDL_Renderer* renderer);
     SDL_Texture* getTexture() const;
-    SDL_Rect getPosition() const;
+    SDL_Rect* getPosition();
 
     void init(SDL_Renderer* renderer, TTF_Font* font);
-    void setText(std::string text, SDL_Rect* position);
+    void setText(std::string text);
     void setPosition(SDL_Rect position);
 };

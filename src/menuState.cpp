@@ -3,7 +3,6 @@
 MenuState::MenuState(StateMachine* stateMachine, SDL_Renderer* renderer) {
     m_StateMachine = stateMachine;
     m_Renderer = renderer;
-    m_TextPosition = { 0, 0 ,0 , 0 };
 }
 
 void MenuState::init() {
@@ -12,18 +11,21 @@ void MenuState::init() {
     m_ExitTextLabel.init(m_Renderer, font);
 
     m_PlayButton = { 300, 160, 200, 80 };
-    m_PlayTextLabel.createLabel("PLAY!", &m_TextPosition, { 0, 0, 0, 255 });
-    m_TextPosition.x = (m_PlayButton.x + (m_PlayButton.w / 2)) - (m_TextPosition.w / 2);
-    m_TextPosition.y = (m_PlayButton.y + (m_PlayButton.h / 2)) - (m_TextPosition.h / 2);
-    m_PlayTextLabel.createLabel("PLAY!", &m_TextPosition, { 0, 0, 0, 255 });
-    
+    m_PlayTextLabel.createLabel("PLAY!", { 0, 0, 0, 255 });
+    SDL_Rect* textPosition = m_PlayTextLabel.getPosition();
+    textPosition->x = (m_PlayButton.x + (m_PlayButton.w / 2)) - (textPosition->w / 2);
+    textPosition->y = (m_PlayButton.y + (m_PlayButton.h / 2)) - (textPosition->h / 2);
+    m_PlayTextLabel.setPosition(*textPosition);
+    m_PlayTextLabel.setText("PLAY!");
+
 
     m_ExitButton = { 300, 360, 200, 80 };
-    SDL_Rect exitTextPosition;
-    m_ExitTextLabel.createLabel("EXIT!", &m_TextPosition, { 0, 0, 0, 255 }); 
-    m_TextPosition.x = (m_ExitButton.x + (m_ExitButton.w / 2)) - (m_TextPosition.w / 2);
-    m_TextPosition.y = (m_ExitButton.y + (m_ExitButton.h / 2)) - (m_TextPosition.h / 2);
-    m_ExitTextLabel.createLabel("EXIT!", &m_TextPosition, { 0, 0, 0, 255 }); 
+    m_ExitTextLabel.createLabel("EXIT!", { 0, 0, 0, 255 }); 
+    textPosition = m_ExitTextLabel.getPosition();
+    textPosition->x = (m_ExitButton.x + (m_ExitButton.w / 2)) - (textPosition->w / 2);
+    textPosition->y = (m_ExitButton.y + (m_ExitButton.h / 2)) - (textPosition->h / 2);
+    m_ExitTextLabel.setPosition(*textPosition); 
+    m_ExitTextLabel.setText("QUIT");
 }
 
 void MenuState::input(SDL_Event event) {

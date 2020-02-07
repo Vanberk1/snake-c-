@@ -31,3 +31,9 @@ void StateMachine::destroy() {
 		m_States.pop_back();
 	}
 }
+
+void StateMachine::restart(std::unique_ptr<State> state) {
+	m_States.pop_back();
+	state->init();
+	m_States.push_back(std::move(state));
+}

@@ -13,6 +13,7 @@ private:
 public:
 	void pushState(std::unique_ptr<State> state);
 	void popState();
+	void restart(std::unique_ptr<State> state);
 	void input(SDL_Event event);
 	void update();
 	void draw();

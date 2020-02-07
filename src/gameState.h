@@ -17,8 +17,9 @@ class GameState : public State {
 private:
 	StateMachine* m_StateMachine;
 	SDL_Renderer* m_Renderer;
-	SDL_Rect m_TextPosition;
 	TextLabel m_ScoreTextLabel;
+	TextLabel m_GameOverText;
+	TextLabel m_RestartText;
 	std::string m_ScoreText;
 	int m_Score;
 	int m_Timer;
