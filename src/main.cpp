@@ -1,4 +1,5 @@
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include <iostream>
 #include "stateMachine.h"
 #include "gameState.h"
@@ -7,10 +8,15 @@
 const int GRID_X = 40;
 const int GRID_Y = 30;
 
+bool IsRunning = true;
+
 int main(int argc, char* args[]) { 
-    bool isRunning = true;
     if(SDL_Init(SDL_INIT_EVERYTHING) != 0) {
         std::cout << "SDL Failed!" << std::endl;
+        return 0;
+    }
+    if(TTF_Init() != 0) {
+        std::cout << "TTF Failed!" << std::endl;
         return 0;
     }
 
@@ -34,23 +40,24 @@ int main(int argc, char* args[]) {
     }
 
     StateMachine stateMachine;
-    stateMachine.pushState(std::make_unique<MenuState>(&stateMachine));
+    stateMachine.pushState(std::make_unique<MenuState>(&stateMachine, renderer));
 
-    while(isRunning) {
+    while(IsRunning) {
         SDL_Event event;
         while(SDL_PollEvent(&event)) {
             if(event.type == SDL_QUIT) {
-                isRunning = false;
+                IsRunning = false;
             }
-            
-            stateMachine.input(event);
+            else {
+                stateMachine.input(event);
+            }
         }
 
         stateMachine.update();
 
 		SDL_SetRenderDrawColor(renderer, 30, 30, 30, 255);
 	    SDL_RenderClear(renderer);
-        stateMachine.draw(renderer);
+        stateMachine.draw();
         SDL_RenderPresent(renderer);
     }
 
@@ -58,6 +65,7 @@ int main(int argc, char* args[]) {
 
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
+    TTF_Quit();
     SDL_Quit();
     return 0;
 }

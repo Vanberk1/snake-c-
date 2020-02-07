@@ -15,6 +15,6 @@ public:
 	void popState();
 	void input(SDL_Event event);
 	void update();
-	void draw(SDL_Renderer* renderer);
+	void draw();
 	void destroy();
 };

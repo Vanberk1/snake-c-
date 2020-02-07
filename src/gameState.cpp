@@ -1,10 +1,16 @@
 #include "gameState.h"
 
-GameState::GameState(StateMachine* stateMachine) {
+GameState::GameState(StateMachine* stateMachine, SDL_Renderer* renderer) {
 	m_StateMachine = stateMachine;
+	m_Renderer = renderer;
 }
 
 void GameState::init() {
+    TTF_Font* font = TTF_OpenFont("./assets/arial.ttf", 32);
+	m_ScoreTextLabel.init(m_Renderer, font);
+	m_TextPosition = { 25, 25, 0, 0};
+	m_ScoreTextLabel.createLabel("SCORE: 0", &m_TextPosition, { 255, 255, 255, 255 }); 
+
 	m_Score = 0;
 	m_Timer = 0;
 	m_SnakeSpeed = 250;
@@ -18,10 +24,15 @@ void GameState::init() {
 }
 
 void GameState::input(SDL_Event event) {
+	if(event.key.keysym.scancode == SDL_SCANCODE_ESCAPE) {
+		// std::cout << "test 1" << std::endl;
+		IsRunning = false;
+	}
 	if(!m_Snake->gameOver()) {
 		if(event.type == SDL_KEYDOWN) {
 			if(event.key.keysym.scancode == SDL_SCANCODE_ESCAPE) {
-				m_StateMachine->popState();
+				// std::cout << "test 2" << std::endl;
+				// m_StateMachine->popState();
 			}
 			if(event.key.keysym.scancode == SDL_SCANCODE_W) {
 				m_Snake->changeDirection(UP);
@@ -34,11 +45,6 @@ void GameState::input(SDL_Event event) {
 			}
 			if(event.key.keysym.scancode == SDL_SCANCODE_D) {
 				m_Snake->changeDirection(RIGHT);
-			}
-
-			if(event.key.keysym.scancode == SDL_SCANCODE_SPACE) {
-				// snake.addSegment();
-				// food.respawn(snake);
 			}
 		}
 	}
@@ -56,18 +62,21 @@ void GameState::update() {
 				m_Score++;
 				m_Snake->addSegment();
 				m_Food->respawn(*m_Snake);
-				std::cout << "Score: " << m_Score << std::endl;
+				std::cout << "SCORE: " << m_Score << std::endl;
+				std::stringstream ss;
+
+				ss << "SCORE: " << m_Score;
+				m_ScoreTextLabel.setText(ss.str(), &m_TextPosition);
 			}
 			m_Timer = 0;
 		}
 	}
 }
 
-void GameState::draw(SDL_Renderer* renderer) {
-	if(!m_Snake->gameOver()) {
-		m_Food->draw(renderer);
-		m_Snake->draw(renderer);
-	}
+void GameState::draw() {
+	m_Food->draw(m_Renderer);
+	m_Snake->draw(m_Renderer);
+	m_ScoreTextLabel.draw(m_Renderer);
 }
 
 void GameState::destroy() {
