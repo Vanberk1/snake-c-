@@ -11,6 +11,9 @@ const int GRID_Y = 30;
 bool IsRunning = true;
 
 int main(int argc, char* args[]) { 
+    int countedFrames = 0;
+    int ticksLastFrame = SDL_GetTicks();
+
     if(SDL_Init(SDL_INIT_EVERYTHING) != 0) {
         std::cout << "SDL Failed!" << std::endl;
         return 0;
@@ -42,6 +45,8 @@ int main(int argc, char* args[]) {
     StateMachine stateMachine;
     stateMachine.pushState(std::make_unique<MenuState>(&stateMachine, renderer));
 
+    float deltaTime = 0.16f;
+
     while(IsRunning) {
         SDL_Event event;
         while(SDL_PollEvent(&event)) {
@@ -53,7 +58,23 @@ int main(int argc, char* args[]) {
             }
         }
 
-        stateMachine.update();
+        while (!SDL_TICKS_PASSED(SDL_GetTicks(), ticksLastFrame + (1000 / 60)));
+        float deltaTime = (SDL_GetTicks() - ticksLastFrame) / 1000.0f;
+        deltaTime = (deltaTime > 0.05f) ? 0.05f : deltaTime;
+        ticksLastFrame = SDL_GetTicks();
+
+        float avgFPS = countedFrames / ( SDL_GetTicks() / 1000.f );
+        if( avgFPS > 100000 ) {
+            avgFPS = 0;
+        }
+        std::stringstream ss;
+        ss << avgFPS;
+        std::string windowTitle = "SNAKE - FPS: " + ss.str();
+        SDL_SetWindowTitle(window, windowTitle.c_str());
+
+        ++countedFrames;
+
+        stateMachine.update(deltaTime);
 
 		SDL_SetRenderDrawColor(renderer, 30, 30, 30, 255);
 	    SDL_RenderClear(renderer);

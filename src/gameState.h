@@ -22,8 +22,8 @@ private:
 	TextLabel m_RestartText;
 	std::string m_ScoreText;
 	int m_Score;
-	int m_Timer;
-	int m_SnakeSpeed;
+	float m_Timer;
+	float m_SnakeSpeed;
 	int m_Size;
 	vec2 m_Position;
 
@@ -34,7 +34,7 @@ public:
   	GameState(StateMachine* stateMachine, SDL_Renderer* renderer);
 	void init() override;
 	void input(SDL_Event event) override;
-	void update() override;
+	void update(float deltaTime) override;
 	void draw() override;
 	void destroy() override;
 };

@@ -21,7 +21,7 @@ public:
     MenuState(StateMachine* stateMachine, SDL_Renderer* renderer);
     void init() override;
 	void input(SDL_Event event) override;
-	void update() override;
+	void update(float deltaTime) override;
 	void draw() override;
 	void destroy() override;
 };

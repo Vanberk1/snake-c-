@@ -51,7 +51,7 @@ void MenuState::input(SDL_Event event) {
     }
 }
 
-void MenuState::update() {
+void MenuState::update(float deltaTime) {
 
 }
 

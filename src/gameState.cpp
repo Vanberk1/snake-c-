@@ -31,8 +31,8 @@ void GameState::init() {
 	m_RestartText.setText("PRESS 'R' TO RESTART");
 
 	m_Score = 0;
-	m_Timer = 0;
-	m_SnakeSpeed = 500;
+	m_Timer = 0.0f;
+	m_SnakeSpeed = 0.05f;
 	m_Size = 20;
 	m_Position.x = 4;
 	m_Position.y = 5;
@@ -78,10 +78,10 @@ void GameState::input(SDL_Event event) {
 	}
 }
 
-void GameState::update() {
+void GameState::update(float deltaTime) {
 	if(!m_Snake->gameOver()) {
-		m_Timer++;
-		if(m_Timer > m_SnakeSpeed) {
+		m_Timer += deltaTime;
+		if(m_Timer >= m_SnakeSpeed) {
 			m_Snake->update();
 			
 			SDL_Rect headRect = m_Snake->getBody().front();

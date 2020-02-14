@@ -15,7 +15,7 @@ public:
 	void popState();
 	void restart(std::unique_ptr<State> state);
 	void input(SDL_Event event);
-	void update();
+	void update(float deltaTime);
 	void draw();
 	void destroy();
 };

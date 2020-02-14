@@ -15,9 +15,9 @@ void StateMachine::input(SDL_Event event) {
 		m_States.back()->input(event);
 }
 
-void StateMachine::update() {
+void StateMachine::update(float deltaTime) {
 	if(m_States.back() != nullptr)
-		m_States.back()->update();
+		m_States.back()->update(deltaTime);
 }
 
 void StateMachine::draw() {
